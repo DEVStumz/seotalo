@@ -13,9 +13,8 @@ const logos = [
   { name: 'Microsoft', src: '/logos/icons8-microsoft-30.png' },
 ];
 
-const HeroChromeStaars = () => {
+
   // FAQ state INSIDE the main component
-  const [activeIndex, setActiveIndex] = useState<number | null>(1);
 
   const faqData = [
     {
@@ -40,8 +39,11 @@ const HeroChromeStaars = () => {
     }
   ];
 
+
+export default function Page() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   return (
-    <>   
+    <main>   
       {/*  Section 1. */}
       <section className="hero-container position-relative overflow-hidden bg-black d-flex min-vh-100">
   
@@ -706,7 +708,7 @@ const HeroChromeStaars = () => {
 
         </div>
       </footer>
-    </>
+   </main>
   );
 };
-export default HeroChromeStaars;
+  
