@@ -12,22 +12,22 @@ const geistMono = GeistMono;
 export const metadata: Metadata = {
   title: "SEOtalo",
   description: "Best analytics app for agencies, consultants, affiliates, e-commerce, and more.",
-
+  // The openGraph block MUST be inside these curly braces
   openGraph: {
     title: "SEOtalo",
     description: "Best analytics app for agencies, consultants, affiliates, e-commerce, and more.",
     url: 'https://seotalo-zf4y.vercel.app/',
     siteName: 'SEOtalo',
-    locale: 'en_US',
-    type: 'website',
     images: [
       {
-        url: '/opengraph-image.png',
+        url: '/opengraph-image.png', // Ensure this file is in your 'public' folder
         width: 1200,
         height: 630,
-        alt: 'SEOtalo Analytics App Preview',
+        alt: 'SEOtalo Preview',
       },
     ],
+    locale: 'en_US',
+    type: 'website',
   },
 };
 
