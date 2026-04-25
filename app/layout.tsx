@@ -3,31 +3,38 @@ import type { Metadata } from "next";
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono'; 
 import "./globals.css";
-import { title } from 'process';
-import { url } from 'inspector';
 
 const geistSans = GeistSans; 
 const geistMono = GeistMono;
 
+const BASE_URL = 'https://seotalo-zf4y.vercel.app';
+
 export const metadata: Metadata = {
   title: "SEOtalo",
   description: "Best analytics app for agencies, consultants, affiliates, e-commerce, and more.",
-  // The openGraph block MUST be inside these curly braces
+  metadataBase: new URL(BASE_URL),
   openGraph: {
     title: "SEOtalo",
     description: "Best analytics app for agencies, consultants, affiliates, e-commerce, and more.",
-    url: 'https://seotalo-zf4y.vercel.app/',
+    url: BASE_URL,
     siteName: 'SEOtalo',
     images: [
       {
-        url: '/opengraph-image.png', // Ensure this file is in your 'public' folder
+        // Absolute URL — required by Facebook, LinkedIn, Slack, etc.
+        url: `${BASE_URL}/opengraph-image.png`,
         width: 1200,
         height: 630,
-        alt: 'SEOtalo Preview',
+        alt: 'SEOtalo – SEO analytics for agencies, consultants & e-commerce',
       },
     ],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SEOtalo',
+    description: 'Best analytics app for agencies, consultants, affiliates, e-commerce, and more.',
+    images: [`${BASE_URL}/opengraph-image.png`],
   },
 };
 
@@ -39,6 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth" 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>

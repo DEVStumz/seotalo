@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-
+import Link from 'next/link';
 
 {/*Logos */}
 const logos = [
@@ -42,6 +42,41 @@ const logos = [
 
 export default function Page() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  // ─── Scroll animation hook ───────────────────────────────────────────────
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+
+            // Special class triggers for compound animations
+            if (entry.target.classList.contains('proof-cards-trigger')) {
+              entry.target.classList.add('proof-cards-visible');
+            }
+            if (entry.target.classList.contains('pills-trigger')) {
+              entry.target.classList.add('pills-visible');
+            }
+            if (entry.target.classList.contains('footer-brand-trigger')) {
+              entry.target.classList.add('footer-brand-visible');
+            }
+
+            observer.unobserve(entry.target); // animate once
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    document.querySelectorAll(
+      '.reveal, .stagger-children, .proof-cards-trigger, .pills-trigger, .footer-brand-trigger'
+    ).forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+  // ─────────────────────────────────────────────────────────────────────────
+
   return (
     <main>   
       {/*  Section 1. */}
@@ -53,27 +88,27 @@ export default function Page() {
           <div className="row align-items-center">
 
             <div className="col-md-6">
-              <div className="d-flex align-items-center mb-4">
+              <div className="d-flex align-items-center mb-4 hero-badge-anim">
                 <span className="badge-version fw-medium bg-white rounded-pill me-2 py-1 px-3" style={{ fontSize: '0.75rem' }}>v1.0</span>
                 <div className="badge-pill-custom px-3 py-1 d-flex align-items-center">
                   <small className="text-light opacity-75"> is now live in all countries →</small>
                 </div>
               </div>
 
-              <h1 className="hero-title text-white fw-bold mb-3 mt-2 display-4">
+              <h1 className="hero-title text-white fw-bold mb-3 mt-2 display-4 hero-title-anim">
                 Boost your <br />
                 website's SEO
               </h1>
 
-              <p className="hero-subtitle text-secondary mb-5">
+              <p className="hero-subtitle text-secondary mb-5 hero-sub-anim">
                 Best analytics app for agencies, consultants, <br className="d-none d-md-block" />
                 affiliates, e-commerce, and more.
               </p>
 
-              <div className="d-flex flex-column flex-sm-row align-items-center gap-3">
-                <button className="btn btn-light rounded-2 px-4 py-2 fw-semibold">
+              <div className="d-flex flex-column flex-sm-row align-items-center gap-3 hero-btns-anim">
+                <Link href="/onboarding" className="btn btn-light rounded-2 px-4 py-2 fw-semibold">
                   Start a Free Trial <span className="ms-1">→</span>
-                </button>
+                </Link>
 
                 <button className="btn btn-outline-light rounded-2 px-4 py-2">
                   Watch Demo <span className="ms-1 small">▶</span>
@@ -171,7 +206,7 @@ export default function Page() {
       {/** Section 3. **/}
       <section className="bg-black py-5 text-white">
         <div className="container mb-3">
-          <div className="mb-5">
+          <div className="mb-5 reveal">
             <span className="badge rounded-pill border border-secondary mb-3 px-3 py-2 text-secondary small">
               Features
             </span>
@@ -188,7 +223,7 @@ export default function Page() {
 
           {/* Bento Grid */}
           <div className="row g-3 g-lg-4">
-            <div className="col-12 col-lg-8">
+            <div className="col-12 col-lg-8 reveal">
               <div className="feature-card glass-card h-100 p-4 overflow-hidden">
                 <div className="feature-content mt-auto overflow-hidden rounded">
                   <img src="/images/keyword.jpeg" className="keyword-graph-img img-fluid" alt="keyword tracking" />
@@ -196,13 +231,13 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="col-12 col-lg-4">
+            <div className="col-12 col-lg-4 reveal reveal-delay-2">
               <div className="console feature-card glass-card w-100 h-100 ">
                 <img src="/images/console.jpeg" className="img-fluid analytics-rotate mt-2 mb-2" alt="Analytics Graph" />
               </div>
             </div>
 
-            <div className="col-12 col-lg-4">
+            <div className="col-12 col-lg-4 reveal">
               <div className="feature-card glass-card h-100 p-4 text-center d-flex flex-column justify-content-center">
                 <button className="btn btn-outline-light btn-midium rounded-pill mx-auto px-4 p-2 mt-4">Connect →</button>
                 <div className="mt-3 mb-4">
@@ -213,7 +248,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="col-12 col-lg-8">
+            <div className="col-12 col-lg-8 reveal reveal-delay-2 pills-trigger">
               <div className="feature-card glass-card h-100 p-4 justify-content-center align-items-center text-center">
                 <div className="pills-stack d-flex flex-column mt-4 align-items-center w-100">
                     <div className="custom-pill">High Traffic Alert</div>
@@ -231,7 +266,7 @@ export default function Page() {
         <div className="container">
           <div className="row align-items-center">
             
-            <div className="col-12 col-lg-6 mt-0">
+            <div className="col-12 col-lg-6 mt-0 reveal reveal--left">
               <div className="proof-content">
                 <div className="badge rounded-pill border border-secondary mb-3 px-3 py-1 text-secondary small opacity-75">
                   Proof
@@ -242,14 +277,14 @@ export default function Page() {
                 </h2>
 
                 <p className="lead text-secondary opacity-90 col-md-10 fs-5 mb-5">
-                  From startups to industry leaders, we’ve helped businesses 
+                  From startups to industry leaders, we've helped businesses 
                   achieve remarkable growth in search visibility and revenue.
                 </p>
               </div>
             </div>
 
             <div className="co-12 col-lg-6 d-flex justify-content-center">
-              <div className="mobile-stagger-container position-relative mx-auto">
+              <div className="mobile-stagger-container position-relative mx-auto proof-cards-trigger">
                 
                 {/* Card 1: */}
                 <div className="result-card stat-mobile-1">
@@ -381,7 +416,7 @@ export default function Page() {
       <section className="pricing bg-black py-6 text-white">
         <div className="container">
           
-          <div className="mb-2 py-5">
+          <div className="mb-2 py-5 reveal">
             <div className="badge rounded-pill border border-secondary mb-3 px-3 py-1 text-secondary small opacity-75">
               Pricing
             </div>
@@ -395,7 +430,7 @@ export default function Page() {
             </p>
           </div>
 
-          <div className="row g-4 align-items-center price-card">
+          <div className="row g-4 align-items-center price-card stagger-children">
             <div className="col-lg-4 mb-3">
               <div className="pricing-card glass-card p-4">
                 <div className="d-flex align-items-center gap-2 mb-4">
@@ -413,7 +448,9 @@ export default function Page() {
                   <li>✓ Weekly reports</li>
                 </ul>
 
-                <button className="btn btn-outline-light w-100 rounded-2 py-2 mt-5">Get Started for Free</button>
+                <Link href="/onboarding" className="btn btn-outline-light w-100 rounded-2 py-2 mt-5">
+                  Get Started for Free
+                </Link>
               </div>
             </div>
 
@@ -436,7 +473,9 @@ export default function Page() {
                   <li>✓ Professional reports</li>
                 </ul>
 
-                <button className="btn btn-black w-100 rounded-2 py-2 fw-bold text-white">Get Started for Free</button>
+                <Link href="/onboarding" className="btn btn-black w-100 rounded-2 py-2 fw-bold text-white">
+                  Get Started for Free
+                </Link>        
               </div>
             </div>
 
@@ -458,7 +497,9 @@ export default function Page() {
                   <li>✓ Dedicated account manager</li>
                 </ul>
 
-                <button className="btn btn-outline-light w-100 rounded-2 py-2 mt-5">Get Started for Free</button>
+                <Link href="/onboarding" className="btn btn-outline-light w-100 rounded-2 py-2 mt-5">
+                  Get Started for Free
+                </Link>
               </div>
             </div>
           </div>
@@ -470,7 +511,7 @@ export default function Page() {
       <section className=" testimonial bg-black py-6 text-white overflow-hidden">
         <div className="container p-4">
           
-          <div className="mb-5 mt-5 text-md-start">
+          <div className="mb-5 mt-5 text-md-start reveal">
             <h2 className="display-5 fw-bold tracking-tight mb-3">
               What People Say <br /> About Us
             </h2>
@@ -481,7 +522,7 @@ export default function Page() {
 
           {/* Scrollable Container */}
           <div className="testimonial-scroll-wrapper">
-            <div className="testimonial-row d-flex flex-nowrap flex-md-wrap g-4">
+            <div className="testimonial-row d-flex flex-nowrap flex-md-wrap g-4 stagger-children">
               
               {/* Testimonial Card 1 */}
               <div className="testimonial-col">
@@ -617,12 +658,12 @@ export default function Page() {
       <section className="faq bg-black py-6 text-white">
         <div className="container p-4">
           <div className="row g-5">
-            <div className="col-lg-5 p-4 question">
+            <div className="col-lg-5 p-4 question reveal reveal--left">
               <h2 className="display-4 fw-bold mb-4">Your Questions <br /> Answered</h2>
               <p className="text-secondary"> We've got everything covered. From start-ups basics to tech-stack getting started.</p>
             </div>
 
-            <div className="col-lg-7 mb-4 answer">
+            <div className="col-lg-7 mb-4 answer reveal reveal--right">
               <div className="faq-list">
                 {faqData.map((item, index) => (
                   <div 
@@ -653,7 +694,7 @@ export default function Page() {
       {/** SECTION 8 FOOTER */}
       <footer className="bg-black text-white pt-5 pb-4 border-top border-secondary border-opacity-10">
         <div className="container">
-          <div className="row gy-5">
+          <div className="row gy-5 stagger-children">
 
             <div className="col-lg-4">
               <h5 className="fw-bold mb-3">SEOtalo.com</h5>
@@ -661,9 +702,9 @@ export default function Page() {
                 Your entire search engine optimization workflow, <br /> 
                 simplified and automated for growth.
               </p>
-              <button className="btn btn-light rounded-3 px-4 py-2 fw-bold small">
+              <Link href="/onboarding" className="btn btn-light rounded-3 px-4 py-2 fw-bold small">
                 Start a free trial ↗
-              </button>
+              </Link>
             </div>
 
             <div className="col-lg-8">
@@ -700,7 +741,7 @@ export default function Page() {
           </div>
 
           {/* Massive Bottom Brand Mark */}
-          <div className="mt-5 pt-5 text-center overflow-hidden">
+          <div className="mt-5 pt-5 text-center overflow-hidden footer-brand-trigger">
             <h1 className="footer-brand-display fw-black m-0 p-0 tracking-tighter">
               SEO<span className="brand-outline">talos</span>
             </h1>
@@ -711,4 +752,3 @@ export default function Page() {
    </main>
   );
 };
-  
