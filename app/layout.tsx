@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SEOtalo',
     description: 'Best analytics app for agencies, consultants, affiliates, e-commerce, and more.',
-    images: [`${BASE_URL}/opengraph-image.png`],
+    images: [`${BASE_URL}/opengraph.png`],
   },
 };
 
