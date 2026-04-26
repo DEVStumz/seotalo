@@ -23,29 +23,28 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: 'SEOtalo',
-    description: 'Best analytics app for agencies, consultants, affiliates, e-commerce, and more.',
-    url: BASE_URL,
-    siteName: 'SEOtalo',
-    images: [
-      {
-        url: '/opengraph.png',  // ← RELATIVE — metadataBase prefixes this correctly
-        width: 1200,
-        height: 630,
-        alt: 'SEOtalo – SEO analytics for agencies, consultants & e-commerce',
-        type: 'image/png',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
+  images: [
+    {
+      url: '/opengraph.png',      // your existing 1200×630 (compress to under 300KB)
+      width: 1200,
+      height: 630,
+      alt: 'SEOtalo – SEO analytics',
+      type: 'image/png',
+    },
+    {
+      url: '/opengraph-small.png', // NEW: 400×400, under 100KB
+      width: 400,
+      height: 400,
+      alt: 'SEOtalo',
+      type: 'image/png',
+    },
+  ],
+},
 
-  twitter: {
-    card: 'summary_large_image',
-    title: 'SEOtalo',
-    description: 'Best analytics app for agencies, consultants, affiliates, e-commerce, and more.',
-    images: ['/opengraph.png'],  
-  },
+twitter: {
+  card: 'summary_large_image',
+  images: ['/opengraph.png'],
+},
 
   robots: {
     index: true,
