@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import './payment.css';
@@ -33,7 +33,96 @@ function formatExpiry(val: string) {
   return digits;
 }
 
-export default function PaymentPage() {
+// ── Eye icon SVGs ─────────────────────────────────────────────────────────────
+function EyeOpen() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+  );
+}
+
+function EyeOff() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+      <line x1="1" y1="1" x2="23" y2="23"/>
+    </svg>
+  );
+}
+
+// ── Success Screen ────────────────────────────────────────────────────────────
+function PaymentSuccess({ plan, onGoToDashboard }: { plan: typeof PLANS.pro; onGoToDashboard: () => void }) {
+  return (
+    <main className="pay-root">
+      <div className="pay-grid-overlay" />
+      <div className="pay-star pay-star--lg"><img src="/concave-star.svg" alt="" /></div>
+      <div className="pay-star pay-star--sm"><img src="/concave-star.svg" alt="" /></div>
+
+      <div className="pay-success-wrap">
+        <div className="pay-success-card">
+
+          {/* Animated checkmark */}
+          <div className="pay-success-circle">
+            <svg className="pay-success-check" viewBox="0 0 52 52">
+              <circle className="pay-check-circle" cx="26" cy="26" r="25" fill="none"/>
+              <path className="pay-check-tick" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+          </div>
+
+          <h1 className="pay-success-title">Payment Successful!</h1>
+          <p className="pay-success-sub">
+            Welcome to SEOtalo <strong>{plan.name}</strong>. Your workspace is ready.<br />
+            A receipt has been sent to your email.
+          </p>
+
+          {/* Receipt card */}
+          <div className="pay-receipt">
+            <div className="pay-receipt-row">
+              <span>Plan</span>
+              <span>{plan.emoji} {plan.name}</span>
+            </div>
+            <div className="pay-receipt-row">
+              <span>Amount charged</span>
+              <span>${plan.price}.00</span>
+            </div>
+            <div className="pay-receipt-row">
+              <span>Billing cycle</span>
+              <span>Monthly</span>
+            </div>
+            <div className="pay-receipt-row">
+              <span>Next renewal</span>
+              <span>{new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            </div>
+          </div>
+
+          {/* Features unlocked */}
+          <div className="pay-unlocked">
+            <p className="pay-unlocked-label">✦ Unlocked with {plan.name}</p>
+            <div className="pay-unlocked-pills">
+              {plan.features.map(f => (
+                <span key={f} className="pay-unlocked-pill">✓ {f}</span>
+              ))}
+            </div>
+          </div>
+
+          <button className="pay-dashboard-btn" onClick={onGoToDashboard}>
+            Go to Dashboard →
+          </button>
+
+          <p className="pay-success-legal">
+            You can manage your subscription anytime in Settings.
+          </p>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+// ── Main Payment Form (needs useSearchParams) ─────────────────────────────────
+function PaymentForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const planKey = (searchParams.get('plan') || 'pro') as 'pro' | 'premium';
@@ -46,8 +135,10 @@ export default function PaymentPage() {
     cvv: '',
     email: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (field: string, raw: string) => {
@@ -73,12 +164,19 @@ export default function PaymentPage() {
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
     setProcessing(true);
-    setTimeout(() => router.push('/dashboard'), 2200);
+    setTimeout(() => {
+      setProcessing(false);
+      setSuccess(true);
+    }, 2200);
   };
 
-  const last4 = form.cardNumber.replace(/\s/g, '').slice(-4) || '••••';
   const cardName = form.name || 'YOUR NAME';
   const expiry = form.expiry || 'MM/YY';
+
+  // Show success screen
+  if (success) {
+    return <PaymentSuccess plan={plan} onGoToDashboard={() => router.push('/dashboard')} />;
+  }
 
   return (
     <main className="pay-root">
@@ -265,7 +363,6 @@ export default function PaymentPage() {
               Renews automatically at ${plan.price}/month. Cancel anytime.
             </div>
 
-            {/* Trust badges */}
             <div className="pay-trust">
               <div className="pay-trust-item">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 0L0 3.33V8.67C0 12.53 3.4 16.11 8 17.33C12.6 16.11 16 12.53 16 8.67V3.33L8 0Z" fill="currentColor" opacity=".3"/><path d="M5.5 8.5L7 10L10.5 6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
@@ -282,7 +379,6 @@ export default function PaymentPage() {
             </div>
           </div>
 
-          {/* Plan switcher */}
           <div className="pay-switcher">
             <p className="pay-switcher-label">Wrong plan?</p>
             {planKey === 'pro' ? (
@@ -295,5 +391,18 @@ export default function PaymentPage() {
 
       </div>
     </main>
+  );
+}
+
+// ── Page export — wraps PaymentForm in Suspense to fix Vercel prerender error ──
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={
+      <main style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', letterSpacing: '0.05em' }}>Loading…</div>
+      </main>
+    }>
+      <PaymentForm />
+    </Suspense>
   );
 }

@@ -569,3 +569,31 @@
 .ob-success-stat { display: flex; flex-direction: column; gap: 4px; }
 .ob-success-stat-val   { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.04em; color: #fff; }
 .ob-success-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.35); }
+
+/* ── Password eye toggle ──────────────────────────────── */
+.ob-input-eye-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ob-input--has-eye {
+  padding-right: 44px !important;
+  width: 100%;
+}
+
+.ob-eye-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  line-height: 0;
+}
+.ob-eye-btn:hover { color: rgba(255,255,255,0.7); }
