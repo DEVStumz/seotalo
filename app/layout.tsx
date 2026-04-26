@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     images: [
       {
         // Absolute URL — required by Facebook, LinkedIn, Slack, etc.
-        url: `${BASE_URL}/opengraph-image.png`,
+        url: `${BASE_URL}/opengraph.png`,
         width: 1200,
         height: 630,
         alt: 'SEOtalo – SEO analytics for agencies, consultants & e-commerce',
