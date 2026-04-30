@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: 'SEO',
     images: [
       {
-        url: '/images/opengraph-small.png', // ✅ metadataBase makes this absolute automatically
+        url: '/images/opengraph.png',
         width: 1200,
         height: 630,
         alt: 'SEOtalo',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SEOtalo',
     description: 'Best analytics app for agencies, consultants, affiliates, e-commerce, and more.',
-    images: ['/images/opengraph-small.png'], // ✅ same image, metadataBase handles it
+    images: ['/images/opengraph.png'],
   },
 }
 
