@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import type { Metadata } from "next";
 import { GeistSans } from 'geist/font/sans';
