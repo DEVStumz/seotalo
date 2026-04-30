@@ -11,51 +11,34 @@ const BASE_URL = 'https://seotalo-zf4y.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-
-  title: {
-    default: 'SEOtalo',
-    template: '%s | SEOtalo',
-  },
+  icons: { icon: '/icon.svg' },
+  title: 'SEOtalo',
   description: 'Best analytics app for agencies, consultants, affiliates, e-commerce, and more.',
 
-  alternates: {
-    canonical: '/',
-  },
-
   openGraph: {
-  images: [
-    {
-      url: '/opengraph.png',      // your existing 1200×630 (compress to under 300KB)
-      width: 1200,
-      height: 630,
-      alt: 'SEOtalo – SEO analytics',
-      type: 'image/png',
-    },
-    {
-      url: '/opengraph-small.png', // NEW: 400×400, under 100KB
-      width: 400,
-      height: 400,
-      alt: 'SEOtalo',
-      type: 'image/png',
-    },
-  ],
-},
-
-twitter: {
-  card: 'summary_large_image',
-  images: ['/opengraph.png'],
-},
-
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-image-preview': 'large',
-    },
+    title: 'SEOtalo',
+    description: 'Best analytics app for agencies, consultants, affiliates, e-commerce, and more.',
+    url: BASE_URL,
+    siteName: 'SEO',
+    images: [
+      {
+        url: '/images/opengraph-small.png', // ✅ metadataBase makes this absolute automatically
+        width: 1200,
+        height: 630,
+        alt: 'SEOtalo',
+      },
+    ],
+    type: 'website',
   },
-};
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SEOtalo',
+    description: 'Best analytics app for agencies, consultants, affiliates, e-commerce, and more.',
+    images: ['/images/opengraph-small.png'], // ✅ same image, metadataBase handles it
+  },
+}
+
 
 // ─── Root Layout ──
 export default function RootLayout({
